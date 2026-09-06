@@ -5,10 +5,10 @@
 // কীভাবে CSV লিংক বের করবেন তার নিয়ম README.md ফাইলে দেওয়া আছে
 // ================================
 const SHEET_CSV_URLS = ["https://docs.google.com/spreadsheets/d/e/2PACX-1vTm2uenDiLu93wXEBWrAB1stf1ltmKcLQWpGMRfs1uNCgeUWeYLLmAfi0p2I1D6Lxmp8Xw-sR8bxVCn/pub?gid=30031640&single=true&output=csv",
-  "https://docs.google.com/spreadsheets/d/e/2PACX-1vRmA_P_ghMLKrBr48GYtRJWAx4iLu83Af9CHmGeKDpr6ZmdpRWF78QNUoSMIFeayRCk8m7AK8A5YpbE/pub?gid=838426032&single=true&output=csv",
-  "https://docs.google.com/spreadsheets/d/e/2PACX-1vQe3YYwCOzhgitW2vpZMz5ulFcUWz3N6g_Y_8ee8ep8DfvXlc7fN1wXyTTPFzSh920eohFkQ8-t90Zf/pub?gid=2146845667&single=true&output=csv",
-  "PASTE_CLASS_6_SHEET_CSV_LINK_HERE",
-  "PASTE_CLASS_7_SHEET_CSV_LINK_HERE"
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vRmA_P_ghMLKrBr48GYtRJWAx4iLu83Af9CHmGeKDpr6ZmdpRWF78QNUoSMIFeayRCk8m7AK8A5YpbE/pub?gid=838426032&single=true&output=csv",
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vQe3YYwCOzhgitW2vpZMz5ulFcUWz3N6g_Y_8ee8ep8DfvXlc7fN1wXyTTPFzSh920eohFkQ8-t90Zf/pub?gid=2146845667&single=true&output=csv",
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vTVbetqgMXwBNcAwT8x6ZVEygiBlYADg5r5JoYkxU5dnQfjNSsIYEaC9ZkdGOPJ5BKoaylWBCaYBakq/pub?gid=2141326006&single=true&output=csv",
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vRhk2UStC5wjuA7IoUVwQnQwhvxKShBl3iZjPmldbxp5QCyLTl2TMuzyFNqk3xpNQyC0kli-wvZtqyI/pub?gid=1219274164&single=true&output=csv"
 ];
 
 // ================================
@@ -68,7 +68,7 @@ const DEFAULT_MAX_MARKS = 100;
 // ================================
 const ATTENDANCE_ADD_TO_TOTAL = true;
 const ATTENDANCE_LABEL = "উপস্থিতি (Attendance)";
-const ATTENDANCE_MAX_MARKS = 10;
+const ATTENDANCE_MAX_MARKS = 100;
 
 // ================================
 // Google Sheet এর কলাম হেডার -> রিপোর্টে যেভাবে দেখাবে
@@ -130,6 +130,25 @@ const REMARKS_BY_RANK = {
 
   // ফেইল করেছে
   "fail": "আরও পরিশ্রম করে পরবর্তী পরীক্ষায় ভালো ফলাফল করতে হবে।"
+};
+
+// ================================
+// আগের পরীক্ষার তুলনায় মেরিট পজিশন বাড়লো/কমলো সেই অনুযায়ী মন্তব্য
+// এটা কাজ করার জন্য Google Sheet-এ "previous rank" নামে একটা নতুন কলাম
+// যোগ করে সেখানে প্রতিটা ছাত্রের আগের পরীক্ষার মেরিট পজিশন (যেমন 1, 2, 3...)
+// বসিয়ে দিতে হবে। এই কলাম খালি থাকলে (বা "previous rank" কলামই না থাকলে)
+// নিচের REMARKS_BY_RANK থেকে আগের মতোই মন্তব্য আসবে — কিছু ভাঙবে না।
+// অগ্রাধিকার (priority): ফেল > র‍্যাঙ্ক পরিবর্তন (উন্নতি/অবনতি) > সাধারণ REMARKS_BY_RANK
+// ================================
+const REMARKS_BY_CHANGE = {
+  // আগের চেয়ে ভালো অবস্থানে এসেছে (যেমন ৪র্থ থেকে ১ম)
+  improved: "চমৎকার! তুমি আগের পরীক্ষার চেয়ে অনেক এগিয়েছ। এই ধারা অব্যাহত রাখো।",
+
+  // আগের চেয়ে পিছিয়ে গেছে (যেমন ১ম থেকে ৪র্থ)
+  dropped: "তোমার আগের পরীক্ষার ফলাফল আরও ভালো ছিল। আরেকটু মনোযোগী হলে আবার এগিয়ে যাবে, চেষ্টা চালিয়ে যাও।",
+
+  // আগের মতোই একই অবস্থানে আছে
+  same: "তুমি তোমার আগের অবস্থান ধরে রেখেছ। আরও ভালো করার চেষ্টা চালিয়ে যাও।"
 };
 
 // সব শিক্ষার্থীকে র‍্যাঙ্ক অনুযায়ী মেরিট দেওয়া হবে
